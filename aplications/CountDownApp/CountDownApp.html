@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Style-Type" content="text/css" />
+        <title>CountDownApp</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Style-Type" content="text/css" />
+        <title>prac_bootstrap vue</title>
+        <!--以下は bootstrap vue の導入-->
+        <!-- Add this to <head> -->
+        <!-- Load required Bootstrap and BootstrapVue CSS -->
+        <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap@4.6.1/dist/css/bootstrap.min.css" />
+        <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.23.0/dist/bootstrap-vue.min.css" />
+
+        <!-- Load polyfills to support older browsers -->
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+
+        <!-- Load Vue followed by BootstrapVue -->
+        <script src="https://unpkg.com/vue@2.6.12/dist/vue.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-vue@2.23.0/dist/bootstrap-vue.min.js"></script>
+
+        <!-- Load the following for BootstrapVueIcons support -->
+        <script src="https://unpkg.com/bootstrap-vue@2.23.0/dist/bootstrap-vue-icons.min.js"></script>
+        
+        <!-- Load the moment -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" type="text/javascript"></script>
+        
+        <style type="text/css">
+            footer {background-color: #EEE;}    
+        </style>
+    </head>
+    <header>
+        <!--
+            <h1>テスト</h1>
+        -->
+    </header>
+        
+    <body>
+        <div id="app">
+            <div>
+                <b-navbar toggleable="lg" type="dark" variant="info">
+                  <b-navbar-brand href="#">{{ AppName }}</b-navbar-brand>
+                  <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+                </b-navbar>
+              </div>
+
+            <br>
+            <b-row>
+                <b-col cols="2">
+                </b-col>
+                <b-col cols="4">
+                    <!--終点を選んでもらう-->
+                    <!--<div>現在の時刻は下記です。</div>
+                    <div> {{ today.nowDate }}</div>
+                    <br>
+                    </br>
+                    -->
+                    <div>指定日までのカウントダウンを実施できます。</div>
+                    <div>いつまでのカウントダウンを開始しますか。</div>
+                    <div>下の方ではその他のカウントダウンも実施しています。</div>
+                    </b-col>
+                <b-col cols="2">
+                </b-col>
+            </b-row>
+            <br>
+                <b-row>
+                    <b-col cols="2">
+                    </b-col>
+                    <b-col cols="4">
+                        <div>
+                        <label for="date-input">日付を選んでください。</label>
+                        <b-input-group class="mb-3">
+                          <b-form-input id="date-input" v-model="userData.selectedDate" type="text" placeholder="YYYY-MM-DD" autocomplete="off"></b-form-input>
+                          <b-input-group-append>
+                            <b-form-datepicker v-model="userData.selectedDate" button-only right locale="en-US" aria-controls="date-input" @context="onContext"></b-form-datepicker>
+                          </b-input-group-append>
+                        </b-input-group>
+                        <!--- <p class="mb-1">Selected: '{{ selected }}'</p> 
+                        <p>Formatted: '{{ formatted }}'</p> -->
+                      </div>
+                    </b-col>
+                    <b-col cols="4">
+                        <div>
+                            <label for="example-input">時刻を選んでください。</label>
+                            <b-input-group class="mb-3">
+                              <b-form-input id="time-input" v-model="userData.selectedTime" type="text" placeholder="HH:mm:ss"></b-form-input>
+                              <b-input-group-append>
+                                <b-form-timepicker v-model="userData.selectedTime" button-only right show-seconds locale="en" aria-controls="time-input"></b-form-timepicker>
+                              </b-input-group-append>
+                            </b-input-group>
+                          </div>
+                    </b-col>
+                    <b-col cols="2">
+                    </b-col>
+                  </b-row>
+                  <b-row>
+                    <b-col cols="2"> 
+                        
+                    </b-col>
+                    <b-col cols="4">
+                        <b-button variant="primary" v-on:click="startCountdown">START</b-button>
+                        <b-button variant="secondary" v-on:click="stopCountdown">STOP</b-button>
+                        <b-button variant="danger" v-on:click="resetCountdown">RESET</b-button>
+                    </b-col>
+                    <b-col cols="4">
+                    </b-col>
+                    <b-col cols="2">
+                    </b-col>
+                  </b-row>
+                  <br>
+                  <b-row>
+                    <b-col cols="2"> 
+                    </b-col>
+                    <b-col cols="8"> 
+                    <div class="mt-3">
+                        <b-card-group deck>    
+                            <b-card bg-variant="secondary" text-variant="white" v-bind:header="userData.selectedDate+' の '+ userData.selectedTime +' まで'" class="text-center" style="font-size: 20px;">
+                                <b-card-text style="font-size: 25px;font-family: monospace;">{{ designatedDate.resultDesignatedDateTimer }}</b-card-text>
+                            </b-card>
+                    
+                        </b-card-group>
+                    </div>
+                    </b-col>
+                    <b-col cols="2">
+                    </b-col>
+                </b-row>
+                  <b-row>
+                    <b-col cols="2"> 
+                    </b-col>
+                    <b-col cols="8"> 
+                    <div class="mt-3">
+                        <b-card-group deck>
+                            <b-card bg-variant="secondary" text-variant="white" v-bind:header="'定時(18時)'+''+'まで' " class="text-center" style="font-size: 20px;">
+                                <b-card-text style="font-size: 25px;font-family: monospace;">{{ today.resultTodayClosingTimer }}</b-card-text>
+                            </b-card>
+
+                            <b-card bg-variant="secondary" text-variant="white" header="明日まで 残り" class="text-center" style="font-size: 20px;">
+                                <b-card-text style="font-size: 25px;font-family: monospace;">{{ tomorrow.resultTomorrowTimer }}</b-card-text>
+                              </b-card>
+
+                              <b-card bg-variant="secondary" text-variant="white" header="週末(土曜)まで残り" class="text-center" style="font-size: 20px;">
+                                <b-card-text style="font-size: 25px;font-family: monospace;">{{ nextWeekend.resultNextWeekendTimer }}</b-card-text>
+                            </b-card> 
+                        </b-card-group>
+                    </div>
+                    </b-col>
+                    <b-col cols="2">
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col cols="2"> 
+                    </b-col>
+                    <b-col cols="8"> 
+                    <div class="mt-3">
+                        <b-card-group deck>
+                            <b-card bg-variant="secondary" text-variant="white" header="来週(月曜)まで" class="text-center" style="font-size: 20px;">
+                                <b-card-text style="font-size: 25px;font-family: monospace;">{{ nextWeek.resultNextWeekTimer }}</b-card-text>
+                              </b-card>                          
+                            
+                            <b-card bg-variant="secondary" text-variant="white" v-bind:header="'来月('+ nextMonth.nextMonth +'月)まで残り'" class="text-center" style="font-size: 20px;">
+                                <b-card-text style="font-size: 25px;font-family: monospace;">{{ nextMonth.resuletNextMonthTimer }}</b-card-text>
+                            </b-card>
+                            
+                            <b-card bg-variant="secondary" text-variant="white" v-bind:header="'来年('+ nextYear.nextYear +'年)まで残り'" class="text-center" style="font-size: 20px;">
+                                <b-card-text style="font-size: 25px;font-family: monospace;">{{ nextYear.resultNextYearTimer }}</b-card-text>
+                            </b-card>
+                        </b-card-group>
+                    </div>
+                    </b-col>
+                    <b-col cols="2">
+                    </b-col>
+                </b-row>
+                <br>
+                  <br>
+                  <div>
+                  <footer class="" style="font-size:20px">
+                  <br>
+                    <b-nav align="center" variant="info">
+                      <b-nav-item active>Active</b-nav-item>
+                      <b-nav-item>Link</b-nav-item>
+                      <b-nav-item>Another Link</b-nav-item>
+                      <b-nav-item disabled>Disabled</b-nav-item>
+                    </b-nav>
+                    <div align="center">
+                        <p>Copyright 2023 Asadaya.</p>
+                        <br>
+                    </div>
+                  </footer>
+                </div>
+        </div>
+
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    AppName:'CountDownApp',
+                    system:{
+                        countDownSelectedDateTimerId:null,
+                        countDownTodayTimerId:null,
+                    },
+                    userData:{
+                        selectedTime: '12:00:00',
+                        selectedDate: ''
+                    },
+                    designatedDate:{
+                        resultDesignatedDateTimer:'-- Days -- h -- m -- s --' 
+                    },
+                    today:{
+                        nowDate:'',
+                        thisYear:'',
+                        todayDate:'',
+                        closingTime:'18:00:00',
+                        resultTodayClosingTimer:'',
+                    },
+                    tomorrow:{
+                        tomorrowDate: '',
+                        resultTomorrowTimer: '',
+                    },
+                    nextWeekend:{
+                        nextWeekendDate:'',
+                        resultNextWeekendTimer:''
+                    },
+                    nextWeek:{
+                        nextWeekDate:'',
+                        resultNextWeekTimer:''
+                    },
+                    nextMonth:{
+                        nextMonthDate:'',
+                        nextMonth:'',
+                        resuletNextMonthTimer: '-- Days'
+                    },
+                    nextYear:{
+                        nextYearDate:'',
+                        nextYear:'',
+                        resultNextYearTimer:''
+                    },
+                    context: null,
+                },
+                methods: {
+                    getNowDate(){
+                        this.today.nowDate = new Date();
+                        //10ミリ秒たったら実行する
+                        setTimeout(() => {
+                            this.getNowDate();
+                        },10);
+                    },
+                    getDaysUntilNextDayOfWeek(targetDayOfWeek = 0){
+                        // 現在の日付を取得
+                        var today = new Date();
+                        // 曜日を取得 (0 = 日曜日)
+                        var currentDayOfWeek = today.getDay();
+                        // 目標の曜日 (1 = 月曜日) までの日数を計算
+                        var daysUntilNextWeek = targetDayOfWeek - currentDayOfWeek;
+                        if (daysUntilNextWeek <= 0) {
+                            daysUntilNextWeek += 7; // すでに月曜日の場合、次の週の月曜日までの日数を計算
+                        }
+                        return daysUntilNextWeek
+                    },
+                    onContext(ctx) {
+                        this.context = ctx
+                    },
+                    startCountdown(){
+                        this.designatedDate.resultDesignatedDateTimer = this.startTimer(this.userData.selectedDate+' '+this.userData.selectedTime)
+                        //100ミリ秒たったら実行する
+                        this.system.countDownSelectedDateTimerId = setTimeout(() => {
+                            this.startCountdown()
+                        },100);
+                    },
+                    stopCountdown(){
+                        clearInterval(this.system.countDownSelectedDateTimerId)
+                    },
+                    resetCountdown(){
+                        this.stopCountdown()
+                        this.designatedDate.resultDesignatedDateTimer='--Days--h --m --s--'
+                    },
+                    addZero(value){
+                        if (value < 10){
+                        value = '0' + value
+                        }
+                        return value
+                    },
+                    startTimer(end_DateAndTime,onlyDays=false){
+                        var now = new Date()
+                        var end_timer_date = new Date(end_DateAndTime)
+
+                        var milli =  end_timer_date.getTime() - now.getTime() 
+                        var tenmilli = Math.floor(milli/10)
+                        var seconds = Math.floor(tenmilli/100)
+                        var minutes = Math.floor(seconds/60)
+                        var hours = Math.floor(minutes/60)
+                        var days = Math.floor(hours/24)
+
+                        if (onlyDays === true){
+                            //日にちのみの場合は +1 して返すとその日を含んだ日数になる
+                            days += 1
+                            return days +(days === 1 ? ' Day ' : ' Days ')
+                        }
+
+                        tenmilli = tenmilli - seconds *100
+                        seconds = seconds - minutes * 60
+                        minutes = minutes - hours * 60
+                        hours = hours - days * 24
+                        
+                        tenmilli = this.addZero(tenmilli)
+                        seconds = this.addZero(seconds)
+                        minutes = this.addZero(minutes)
+                        hours = this.addZero(hours)
+
+                        if (days === 0){
+                            if (hours === '00'){
+                                if (minutes === '00'){
+                                    return seconds +' s ' +tenmilli
+                                }
+                                else{
+                                    return minutes+' m ' +seconds +' s ' +tenmilli
+                                }
+                            }else {
+                                return hours+' h '+minutes+' m ' +seconds +' s ' +tenmilli
+                            }
+                        } else {
+                            return days +(days === 1 ? ' Day ' : ' Days ') +hours+' h '+minutes+' m ' +seconds +' s ' +tenmilli
+                        }
+                    },
+                    startCountDownToday(){
+
+                        var end_of_worktime = this.today.todayDate+" "+this.today.closingTime
+                        var end_of_today = this.tomorrow.tomorrowDate+" "+"00:00:00"
+                        var end_of_thisweekend = this.nextWeekend.nextWeekendDate+" "+"00:00:00"
+                        var end_of_thisweek = this.nextWeek.nextWeekDate+" "+"00:00:00"
+                        var end_of_thismonth = this.nextMonth.nextMonthDate+" "+"00:00:00"
+                        var end_of_thisyear = this.nextYear.nextYearDate+" "+"00:00:00"
+
+                        this.today.resultTodayClosingTimer = this.startTimer(end_of_worktime)
+                        this.tomorrow.resultTomorrowTimer = this.startTimer(end_of_today)
+                        this.nextWeekend.resultNextWeekendTimer = this.startTimer(end_of_thisweekend,onlyDays=true)
+                        this.nextWeek.resultNextWeekTimer = this.startTimer(end_of_thisweek,onlyDays=true)
+                        this.nextMonth.resuletNextMonthTimer = this.startTimer(end_of_thismonth,onlyDays=true)
+                        this.nextYear.resultNextYearTimer = this.startTimer(end_of_thisyear,onlyDays=true)
+                        //100ミリ秒たったら実行する
+                        this.system.countDownTodayTimerId = setTimeout(() => {
+                            this.startCountDownToday()
+                        },100);                        
+                    },
+                    getDesignatedDate(days_after =0,month_after=0){
+                        // 現在の日付を取得
+                        const today = new Date();
+                        // 日を加算して次の日の日付を取得
+                        const designated_date = new Date(today);
+                        designated_date.setDate(today.getDate() + days_after);
+                        // 日付を"yyyy-mm-dd"の形式にフォーマット
+                        const year = designated_date.getFullYear();
+                        // 月は0から始まるため、+1する。padStartで二桁にする
+                        const month = String(designated_date.getMonth() + 1 + month_after).padStart(2, '0'); 
+                        const day = String(designated_date.getDate()).padStart(2, '0');
+                        // "yyyy-mm-dd"形式の日付文字列を作成
+                        const formattedDate = `${year}-${month}-${day}`;
+                        
+                        return formattedDate
+                    }
+                },
+                created: function(){
+                    this.getNowDate();
+                    //今日日付を取得
+                    this.today.todayDate = this.getDesignatedDate(days_after=0,month_after=0)
+                    //今年を取得
+                    this.today.thisYear = (this.today.todayDate).slice(0,4)
+                    //来年を取得
+                    this.nextYear.nextYear = (parseInt(this.today.thisYear) +1  ).toString()
+                    //来年の1月1日の日付を取得
+                    this.nextYear.nextYearDate = (parseInt(this.today.thisYear) +1  )+ '-01-01'
+
+                    //1週間後の日付を取得
+                    this.userData.selectedDate = this.getDesignatedDate(days_after=7,month_after=0)
+
+                    //1日後の日付を取得
+                    this.tomorrow.tomorrowDate = this.getDesignatedDate(days_after=1,month_after=0);
+                    //週末(土曜)までの日数を取得
+                    var days_until_next_weekend = this.getDaysUntilNextDayOfWeek(targetDayOfWeek=6)
+                    this.nextWeekend.nextWeekendDate = this.getDesignatedDate(days_after=days_until_next_weekend)
+
+                    //来週(月曜)までの日数を取得
+                    var days_until_next_week = this.getDaysUntilNextDayOfWeek(targetDayOfWeek=1)
+                    this.nextWeek.nextWeekDate = this.getDesignatedDate(days_after=days_until_next_week)
+
+                    //来月の1日を取得
+                    var next_month = this.nextMonth.nextMonthDate
+                    next_month = this.getDesignatedDate(days_after=0,month_after=1);
+                    next_month = next_month.substring(0,next_month.length -2) +'01'
+                    this.nextMonth.nextMonth = next_month.substring(5,7)
+                    this.nextMonth.nextMonthDate = next_month
+                    //ユーザ選択の日付の初期値は一週間後の10時
+                    nextWeek = this.getDesignatedDate(days_after=7,month_after=0)
+                    this.userData.selectedDate = nextWeek
+
+                    //今日始まりの各種カウントダウンを実行
+                    this.startCountDownToday();
+                },
+                watch: {
+                },
+                computed: {
+                },
+                filters: {
+                }
+            })
+        </script>
+    </body>
+</html>
