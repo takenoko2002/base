@@ -297,6 +297,11 @@
                             return days +(days === 1 ? ' Day ' : ' Days ')
                         }
 
+                        //daysの値が負の場合は、時刻を過ぎているのでその旨の文字列を返す
+                        if (days < 0){
+                            return "The countdown has ended"
+                        }
+
                         tenmilli = tenmilli - seconds *100
                         seconds = seconds - minutes * 60
                         minutes = minutes - hours * 60
