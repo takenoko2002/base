@@ -1,5 +1,145 @@
-Hello World!!
-This is Asadaya base.
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Style-Type" content="text/css" />
+        <title>CountDownApp</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Style-Type" content="text/css" />
+        <title>prac_bootstrap vue</title>
+        <!--以下は bootstrap vue の導入-->
+        <!-- Add this to <head> -->
+        <!-- Load required Bootstrap and BootstrapVue CSS -->
+        <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap@4.6.1/dist/css/bootstrap.min.css" />
+        <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.23.0/dist/bootstrap-vue.min.css" />
 
-<a href="applications/CountDownAPP/CountDownApp.html">カウントダウンアプリ(CountDownApp)</a>
-指定日付までのカウントダウンを実施してくれるアプリです。
+        <!-- Load polyfills to support older browsers -->
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+
+        <!-- Load Vue followed by BootstrapVue -->
+        <script src="https://unpkg.com/vue@2.6.12/dist/vue.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-vue@2.23.0/dist/bootstrap-vue.min.js"></script>
+
+        <!-- Load the following for BootstrapVueIcons support -->
+        <script src="https://unpkg.com/bootstrap-vue@2.23.0/dist/bootstrap-vue-icons.min.js"></script>
+        
+        <!-- Load the moment -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" type="text/javascript"></script>
+        
+        <style type="text/css">
+            footer {background-color: #EEE;}
+            #container {
+                display: flex;
+            }
+            #left-content {
+                flex: 1; /* 左半分のコンテンツがスクロール不可能にする */
+            }
+            #scrollable-container {
+                width: 50%;
+                height: 100vh;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+            }
+            #scrollable-content {
+                flex: 1;
+                overflow-y: scroll; /* 右半分のコンテンツを縦スクロール可能にする */
+            }
+        </style>
+    </head>
+    <header>
+        <!--
+            <h1>テスト</h1>
+        -->
+    </header>
+        
+    <body>
+        <div id="app">
+            <div id="container">
+                <div id="left-content">
+                  <!-- 左半分のコンテンツをここに配置 -->
+                  左半分のコンテンツ
+                </div>
+                <div id="scrollable-container">
+                    <div id="scrollable-content">
+                    <!-- 右半分のスクロール可能なコンテンツをここに配置 -->
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br><br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    Hello world!!<br>
+                    This is Asadaya base.<br>
+                    <a href="applications/CountDownAPP/CountDownApp.html">カウントダウンアプリ(CountDownApp)</a>
+                    指定日付までのカウントダウンを実施してくれるアプリです。
+                  </div>
+                </div>
+              </div>
+
+<!--end of app-->
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+        },
+        methods: {
+
+        },
+        created: function(){
+        },
+        watch: {
+                },
+        computed: {
+        },
+        filters: {
+        }
+    })
+</script>
+</body>
+</html>
